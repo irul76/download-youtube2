@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Downloader</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #020617;
+      padding: 25px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 20px rgba(0,0,0,.6);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #22c55e;
+      color: #020617;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #16a34a;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #38bdf8;
+    }
+
+    .spinner {
+      margin: 10px auto;
+      width: 30px;
+      height: 30px;
+      border: 4px solid #334155;
+      border-top: 4px solid #38bdf8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>YouTube Downloader</h2>
+
+    <form id="form">
+      <input type="text" name="url" placeholder="Paste URL YouTube" required>
+      <button id="btn">Download</button>
+    </form>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      Menyiapkan download...
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("form")
+    const loading = document.getElementById("loading")
+    const btn = document.getElementById("btn")
+
+    form.onsubmit = async (e) => {
+      e.preventDefault()
+      btn.disabled = true
+      loading.style.display = "block"
+
+      const data = new FormData(form)
+      const res = await fetch("/prepare", {
+        method: "POST",
+        body: data
+      })
+
+      const downloadUrl = await res.text()
+      window.location.href = downloadUrl
+    }
+  </script>
+
+</body>
+</html>
